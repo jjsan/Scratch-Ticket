@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainScreen">
+    <fragment
+        android:id="@+id/screenScratchTicket"
+        android:name="com.jjsan.scratchticket.Scratch"
+        android:label="fragment_scratch"
+        tools:layout="@layout/fragment_scratch" />
+    <fragment
+        android:id="@+id/mainScreen"
+        android:name="com.jjsan.scratchticket.MainScreen"
+        android:label="fragment_main_screen"
+        tools:layout="@layout/fragment_main_screen" >
+        <action
+            android:id="@+id/action_mainScreen_to_scratch"
+            app:destination="@id/screenScratchTicket" />
+        <action
+            android:id="@+id/action_mainScreen_to_screenActivateTicket"
+            app:destination="@id/screenActivateTicket" />
+    </fragment>
+    <fragment
+        android:id="@+id/screenActivateTicket"
+        android:name="com.jjsan.scratchticket.ScreenActivateTicket"
+        android:label="fragment_screen_activate_ticket"
+        tools:layout="@layout/fragment_screen_activate_ticket" />
+</navigation>
