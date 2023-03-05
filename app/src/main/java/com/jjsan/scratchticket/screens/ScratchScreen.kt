@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -90,11 +91,22 @@ fun ScratchScreenWithViewModel(
             }
         }
 
+        val ticketStatusValues = ticketStatusViewModel.ticketStatus.collectAsState()
+        val ticketCode = ticketStatusValues.value.ticketCode
+
         Text(
             text = progress,
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(top = 20.dp)
         )
+
+        ticketCode?.run {
+            Text(
+                text = ticketCode.toString(),
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier.padding(top = 20.dp)
+            )
+        }
     }
 
     BackHandler(enabled = true) {
@@ -105,4 +117,5 @@ fun ScratchScreenWithViewModel(
         }
         navHostController.navigate(MAIN_SCREEN)
     }
+
 }
