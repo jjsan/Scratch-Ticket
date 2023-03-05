@@ -10,9 +10,10 @@ import com.jjsan.scratchticket.navigation.NavigationRoutes.Companion.MAIN_SCREEN
 import com.jjsan.scratchticket.navigation.NavigationRoutes.Companion.SCRATCH_SCREEN
 import com.jjsan.scratchticket.screens.ActivationScreen
 import com.jjsan.scratchticket.screens.ScratchScreen
+import com.jjsan.scratchticket.viewmodel.TicketStatusViewModel
 
 @Composable
-fun ApplicationNavigation() {
+fun ApplicationNavigation(viewModel: TicketStatusViewModel) {
     val navController = rememberNavController()
     val startNavigation = MAIN_SCREEN
 
@@ -21,19 +22,19 @@ fun ApplicationNavigation() {
         composable(
             route = MAIN_SCREEN,
         ) {
-            MainScreen()
+            MainScreen(navController, viewModel)
         }
 
         composable(
             route = SCRATCH_SCREEN,
         ) {
-            ScratchScreen()
+            ScratchScreen(navController, viewModel)
         }
 
         composable(
             route = ACTIVATION_SCREEN,
         ) {
-            ActivationScreen()
+            ActivationScreen(navController, viewModel)
         }
 
     }
