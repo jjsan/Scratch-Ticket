@@ -5,10 +5,15 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -20,6 +25,7 @@ import com.jjsan.scratchticket.enums.TicketStatusEnum
 import com.jjsan.scratchticket.navigation.NavigationRoutes.Companion.MAIN_SCREEN
 import com.jjsan.scratchticket.viewmodel.TicketStatusViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -41,22 +47,22 @@ fun ScratchScreenWithViewModel(
     var job: Job = Job()
 
     Column {
-        val ticketStatus = ticketStatusViewModel.ticketStatus.collectAsState()
-
-        Text(ticketStatus.value.ticketStatus.toString())
-        Text(ticketStatus.value.ticketCode.toString())
-
         val scope = rememberCoroutineScope()
         val currentContext = LocalContext.current
+        var progress by remember { mutableStateOf("") }
+        val progressScratching = stringResource(id = R.string.scratching)
+        val progressScratched = stringResource(id = R.string.scratched)
 
         AppButton(
             buttonLabel = stringResource(id = R.string.btn_scratch_ticket)
         ) {
             job = scope.launch {
                 try {
-//                    delay(2000)
+                    progress = progressScratching
+                    delay(2000)
                     ticketStatusViewModel.setTicketStatus(TicketStatusEnum.SCRATCHED_NOT_ACTIVATED)
                     ticketStatusViewModel.setTicketCode(UUID.randomUUID())
+                    progress = progressScratched
                 } catch (ex: Exception) {
                     Toast.makeText(currentContext, "Canceled", Toast.LENGTH_LONG)
                         .show()
@@ -83,6 +89,12 @@ fun ScratchScreenWithViewModel(
                 ticketStatusViewModel.setTicketCode(null)
             }
         }
+
+        Text(
+            text = progress,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(top = 20.dp)
+        )
     }
 
     BackHandler(enabled = true) {

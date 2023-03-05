@@ -56,9 +56,9 @@ fun ActivationScreen(
 
         Text(
             text = if (ticketActivated) {
-                stringResource(R.string.activation_succesfull)
+                stringResource(R.string.activation_successful)
             } else {
-                stringResource(R.string.activation_unseccesful)
+                stringResource(R.string.activation_unsuccessful)
             }
         )
 
@@ -74,8 +74,8 @@ fun ActivationScreen(
 
         if (showActicationError) {
             ShowSimpleNotification(
-                "Simple notification",
-                "This is a simple notification with default priority."
+                stringResource(id = R.string.app_name),
+                stringResource(id = R.string.error_activation)
             )
         }
     }
