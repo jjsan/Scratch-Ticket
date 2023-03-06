@@ -36,7 +36,7 @@ fun MainScreenWithViewModel(
     Column {
         ApplicationLabel()
 
-        val ticketStatusValues = ticketStatusViewModel.ticketStatus.collectAsState()
+        val ticketStatusValues = ticketStatusViewModel.uiState.collectAsState()
         val ticketStatus = ticketStatusValues.value.ticketStatus
         val ticketCode = ticketStatusValues.value.ticketCode
 

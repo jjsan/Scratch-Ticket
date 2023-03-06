@@ -10,7 +10,6 @@
     <string name="btn_scratch_ticket">Scratch Ticket\n</string>
     <string name="scratch_ticket">* Scratch Ticket *</string>
     <string name="back_to_main_screen">Back to main screen</string>
-    <string name="cancel_scratch">Cancel scratch</string>
     <string name="activate_ticket">Activate ticket</string>
     <string name="activation_successful">Activation successful</string>
     <string name="activation_unsuccessful">Activation NOT successful</string>

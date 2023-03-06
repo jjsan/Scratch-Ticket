@@ -13,12 +13,27 @@ data class TicketStatusData(
     var ticketCode: UUID? = null
 )
 
-class TicketStatusViewModel() : ViewModel() {
+class TicketStatusViewModel : ViewModel() {
 
     private val _ticketStatus = MutableStateFlow(TicketStatusData())
-    val ticketStatus = _ticketStatus.asStateFlow()
+    val uiState = _ticketStatus.asStateFlow()
 
-    fun setTicketStatus(ticketStatus: TicketStatusEnum) {
+
+    fun setTicketScratched(ticketCode: UUID?) {
+        setTicketStatus(TicketStatusEnum.SCRATCHED_NOT_ACTIVATED)
+        setTicketCode(ticketCode)
+    }
+
+    fun setTicketActivated() {
+        setTicketStatus(TicketStatusEnum.SCRATCHED_ACTIVATED)
+    }
+
+    fun clearTicket() {
+        setTicketStatus(TicketStatusEnum.NOT_SCRATCHED)
+        setTicketCode(null)
+    }
+
+    private fun setTicketStatus(ticketStatus: TicketStatusEnum) {
         this._ticketStatus.update { currentState ->
             currentState.copy(
                 ticketStatus = ticketStatus
@@ -26,7 +41,7 @@ class TicketStatusViewModel() : ViewModel() {
         }
     }
 
-    fun setTicketCode(ticketCode: UUID?) {
+    private fun setTicketCode(ticketCode: UUID?) {
         _ticketStatus.update { currentState ->
             currentState.copy(
                 ticketCode = ticketCode

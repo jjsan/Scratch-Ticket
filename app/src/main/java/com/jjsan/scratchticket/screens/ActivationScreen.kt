@@ -19,7 +19,6 @@ import com.jjsan.scratchticket.R
 import com.jjsan.scratchticket.ShowSimpleNotification
 import com.jjsan.scratchticket.api.TicketActivation
 import com.jjsan.scratchticket.component.AppButton
-import com.jjsan.scratchticket.enums.TicketStatusEnum
 import com.jjsan.scratchticket.navigation.NavigationRoutes.Companion.MAIN_SCREEN
 import com.jjsan.scratchticket.viewmodel.TicketStatusViewModel
 import kotlinx.coroutines.launch
@@ -31,7 +30,7 @@ fun ActivationScreen(
 ) {
     val scope = rememberCoroutineScope()
 
-    val ticketStatusValues = ticketStatusViewModel.ticketStatus.collectAsState()
+    val ticketStatusValues = ticketStatusViewModel.uiState.collectAsState()
     val ticketCode = ticketStatusValues.value.ticketCode
 
     var ticketActivated by remember { mutableStateOf(false) }
@@ -43,7 +42,7 @@ fun ActivationScreen(
                 ticketCode?.let {
                     ticketActivated = TicketActivation().activateTicket(it)
 
-                    ticketStatusViewModel.setTicketStatus(TicketStatusEnum.SCRATCHED_ACTIVATED)
+                    ticketStatusViewModel.setTicketActivated()
 
                     if (!ticketActivated) {
                         showActicationError = true

@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.jjsan.scratchticket.R
 import com.jjsan.scratchticket.component.AppButton
-import com.jjsan.scratchticket.enums.TicketStatusEnum
 import com.jjsan.scratchticket.navigation.NavigationRoutes.Companion.MAIN_SCREEN
 import com.jjsan.scratchticket.viewmodel.TicketStatusViewModel
 import kotlinx.coroutines.Job
@@ -61,8 +60,7 @@ fun ScratchScreenWithViewModel(
                 try {
                     progress = progressScratching
                     delay(2000)
-                    ticketStatusViewModel.setTicketStatus(TicketStatusEnum.SCRATCHED_NOT_ACTIVATED)
-                    ticketStatusViewModel.setTicketCode(UUID.randomUUID())
+                    ticketStatusViewModel.setTicketScratched(UUID.randomUUID())
                     progress = progressScratched
                 } catch (ex: Exception) {
                     Toast.makeText(currentContext, "Canceled", Toast.LENGTH_LONG)
@@ -81,17 +79,7 @@ fun ScratchScreenWithViewModel(
 
         Spacer(modifier = Modifier.height(50.dp))
 
-        AppButton(
-            buttonLabel = stringResource(id = R.string.cancel_scratch)
-        ) {
-            if (job.isActive) {
-                job.cancel()
-                ticketStatusViewModel.setTicketStatus(TicketStatusEnum.NOT_SCRATCHED)
-                ticketStatusViewModel.setTicketCode(null)
-            }
-        }
-
-        val ticketStatusValues = ticketStatusViewModel.ticketStatus.collectAsState()
+        val ticketStatusValues = ticketStatusViewModel.uiState.collectAsState()
         val ticketCode = ticketStatusValues.value.ticketCode
 
         Text(
@@ -112,8 +100,7 @@ fun ScratchScreenWithViewModel(
     BackHandler(enabled = true) {
         if (job.isActive) {
             job.cancel()
-            ticketStatusViewModel.setTicketStatus(TicketStatusEnum.NOT_SCRATCHED)
-            ticketStatusViewModel.setTicketCode(null)
+            ticketStatusViewModel.clearTicket()
         }
         navHostController.navigate(MAIN_SCREEN)
     }
