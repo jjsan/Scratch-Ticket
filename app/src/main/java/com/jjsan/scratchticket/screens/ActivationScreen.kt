@@ -45,9 +45,9 @@ fun ActivationScreen(
                     showActivationError = false
                     ticketActivated = TicketActivation().activateTicket(it)
 
-                    ticketStatusViewModel.setTicketActivated()
-
-                    if (!ticketActivated) {
+                    if (ticketActivated) {
+                        ticketStatusViewModel.setTicketActivated()
+                    } else {
                         showActivationError = true
                     }
                 }
