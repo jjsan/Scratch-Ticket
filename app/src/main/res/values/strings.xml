@@ -17,5 +17,6 @@
     <string name="scratching">Scratching</string>
     <string name="scratched">Scratched</string>
     <string name="error_activation">Error activating ticket on server</string>
+    <string name="already_activated">Ticket already activated</string>
 
 </resources>

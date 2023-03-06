@@ -19,6 +19,7 @@ import com.jjsan.scratchticket.R
 import com.jjsan.scratchticket.ShowSimpleNotification
 import com.jjsan.scratchticket.api.TicketActivation
 import com.jjsan.scratchticket.component.AppButton
+import com.jjsan.scratchticket.enums.TicketStatusEnum
 import com.jjsan.scratchticket.navigation.NavigationRoutes.Companion.MAIN_SCREEN
 import com.jjsan.scratchticket.viewmodel.TicketStatusViewModel
 import kotlinx.coroutines.launch
@@ -32,20 +33,22 @@ fun ActivationScreen(
 
     val ticketStatusValues = ticketStatusViewModel.uiState.collectAsState()
     val ticketCode = ticketStatusValues.value.ticketCode
+    val ticketStatus = ticketStatusValues.value.ticketStatus
 
     var ticketActivated by remember { mutableStateOf(false) }
-    var showActicationError by remember { mutableStateOf(false) }
+    var showActivationError by remember { mutableStateOf(false) }
 
     Column {
         AppButton(buttonLabel = stringResource(id = R.string.activate_ticket)) {
             scope.launch {
                 ticketCode?.let {
+                    showActivationError = false
                     ticketActivated = TicketActivation().activateTicket(it)
 
                     ticketStatusViewModel.setTicketActivated()
 
                     if (!ticketActivated) {
-                        showActicationError = true
+                        showActivationError = true
                     }
                 }
             }
@@ -57,21 +60,30 @@ fun ActivationScreen(
             text = if (ticketActivated) {
                 stringResource(R.string.activation_successful)
             } else {
-                stringResource(R.string.activation_unsuccessful)
+                if (ticketStatus == TicketStatusEnum.SCRATCHED_ACTIVATED) {
+                    stringResource(R.string.already_activated)
+                } else {
+                    ""
+                }
             }
         )
 
-        Spacer(modifier = Modifier.height(50.dp))
-
-        ticketCode?.run {
-            AppButton(
-                buttonLabel = stringResource(id = R.string.back_to_main_screen)
-            ) {
-                navHostController.navigate(MAIN_SCREEN)
-            }
+        if (showActivationError) {
+            Text(
+                text = stringResource(id = R.string.error_activation)
+            )
         }
 
-        if (showActicationError) {
+        Spacer(modifier = Modifier.height(50.dp))
+
+        AppButton(
+            buttonLabel = stringResource(id = R.string.back_to_main_screen)
+        ) {
+            navHostController.navigate(MAIN_SCREEN)
+        }
+
+        if (showActivationError) {
+            showActivationError = true
             ShowSimpleNotification(
                 stringResource(id = R.string.app_name),
                 stringResource(id = R.string.error_activation)
